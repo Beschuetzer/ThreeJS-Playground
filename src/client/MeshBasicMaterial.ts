@@ -1,19 +1,11 @@
-//It is an extension of the MeshStandardMaterial which gives more reflectivity options.
-
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import { GUI } from 'three/examples/jsm/libs/dat.gui.module'
+import {GUI} from 'three/examples/jsm/libs/dat.gui.module'
 
 const scene: THREE.Scene = new THREE.Scene()
-//scene.background = new THREE.Color(0xff0000)
-
 const axesHelper = new THREE.AxesHelper(5)
 scene.add(axesHelper)
-
-const light = new THREE.PointLight(0xffffff, 2);
-light.position.set(10, 10, 10);
-scene.add(light);
 
 const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
@@ -30,14 +22,14 @@ const icosahedronGeometry: THREE.IcosahedronGeometry = new THREE.IcosahedronGeom
 const planeGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry()
 const torusKnotGeometry: THREE.TorusKnotGeometry = new THREE.TorusKnotGeometry()
 
-const material: THREE.MeshPhysicalMaterial = new THREE.MeshPhysicalMaterial({})
+const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial()//{ color: 0x00ff00, wireframe: true })
 
 // const texture = new THREE.TextureLoader().load("img/grid.png")
 // material.map = texture
-// const envTexture = new THREE.CubeTextureLoader().load(["img/px_50.png", "img/nx_50.png", "img/py_50.png", "img/ny_50.png", "img/pz_50.png", "img/nz_50.png"])
+const envTexture = new THREE.CubeTextureLoader().load(["img/px_50.png", "img/nx_50.png", "img/py_50.png", "img/ny_50.png", "img/pz_50.png", "img/nz_50.png"])
 // envTexture.mapping = THREE.CubeReflectionMapping
-// //envTexture.mapping = THREE.CubeRefractionMapping
-// material.envMap = envTexture
+envTexture.mapping = THREE.CubeRefractionMapping
+material.envMap = envTexture
 
 const cube: THREE.Mesh = new THREE.Mesh(boxGeometry, material)
 cube.position.x = 5
@@ -98,33 +90,26 @@ materialFolder.open()
 
 var data = {
     color: material.color.getHex(),
-    emissive: material.emissive.getHex()
 };
 
-var meshPhysicalMaterialFolder = gui.addFolder('THREE.MeshPhysicalMaterial');
+var meshBasicMaterialFolder = gui.addFolder('THREE.MeshBasicMaterial');
 
-meshPhysicalMaterialFolder.addColor(data, 'color').onChange(() => { material.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
-meshPhysicalMaterialFolder.addColor(data, 'emissive').onChange(() => { material.emissive.setHex(Number(data.emissive.toString().replace('#', '0x'))) });
-meshPhysicalMaterialFolder.add(material, 'wireframe');
-meshPhysicalMaterialFolder.add(material, 'flatShading').onChange(() => updateMaterial())
-meshPhysicalMaterialFolder.add(material, 'reflectivity', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'refractionRatio', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'roughness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'metalness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'clearcoat', 0, 1, 0.01)
-meshPhysicalMaterialFolder.add(material, 'clearcoatRoughness', 0, 1, 0.01)
-meshPhysicalMaterialFolder.open()
+meshBasicMaterialFolder.addColor(data, 'color').onChange(() => { material.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
+meshBasicMaterialFolder.add(material, 'wireframe');
+meshBasicMaterialFolder.add(material, 'combine', options.combine).onChange(() => updateMaterial())
+meshBasicMaterialFolder.add(material, 'reflectivity', 0, 1);
+meshBasicMaterialFolder.add(material, 'refractionRatio', 0, 1);
+meshBasicMaterialFolder.open()
 
 function updateMaterial() {
     material.side = Number(material.side)
+    material.combine = Number(material.combine)
     material.needsUpdate = true
 }
 
 var animate = function () {
     requestAnimationFrame(animate)
 
-    torusKnot.rotation.x+=.01
-    torusKnot.rotation.y+=.01
     render()
 
     stats.update()

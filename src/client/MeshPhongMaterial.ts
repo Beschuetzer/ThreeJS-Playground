@@ -1,4 +1,6 @@
-//It is an extension of the MeshStandardMaterial which gives more reflectivity options.
+//It is useful for simulating shiny objects such as polished wood.
+
+//It is more computationally-expensive to use than the MeshLambertMaterial, MeshNormalMaterial and MeshBasicMaterial so if performance need to be considered, then one option you have is to only use it when necessary.
 
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -15,6 +17,12 @@ const light = new THREE.PointLight(0xffffff, 2);
 light.position.set(10, 10, 10);
 scene.add(light);
 
+const light2 = new THREE.PointLight(0xffffff, 2);
+light2.position.set(-10, -10, -10);
+scene.add(light2);
+
+
+
 const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
 const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer()
@@ -30,14 +38,14 @@ const icosahedronGeometry: THREE.IcosahedronGeometry = new THREE.IcosahedronGeom
 const planeGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry()
 const torusKnotGeometry: THREE.TorusKnotGeometry = new THREE.TorusKnotGeometry()
 
-const material: THREE.MeshPhysicalMaterial = new THREE.MeshPhysicalMaterial({})
+const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial()
 
-// const texture = new THREE.TextureLoader().load("img/grid.png")
-// material.map = texture
-// const envTexture = new THREE.CubeTextureLoader().load(["img/px_50.png", "img/nx_50.png", "img/py_50.png", "img/ny_50.png", "img/pz_50.png", "img/nz_50.png"])
-// envTexture.mapping = THREE.CubeReflectionMapping
-// //envTexture.mapping = THREE.CubeRefractionMapping
-// material.envMap = envTexture
+const texture = new THREE.TextureLoader().load("img/grid.png")
+material.map = texture
+const envTexture = new THREE.CubeTextureLoader().load(["img/px_50.png", "img/nx_50.png", "img/py_50.png", "img/ny_50.png", "img/pz_50.png", "img/nz_50.png"])
+envTexture.mapping = THREE.CubeReflectionMapping
+//envTexture.mapping = THREE.CubeRefractionMapping
+material.envMap = envTexture
 
 const cube: THREE.Mesh = new THREE.Mesh(boxGeometry, material)
 cube.position.x = 5
@@ -98,33 +106,33 @@ materialFolder.open()
 
 var data = {
     color: material.color.getHex(),
-    emissive: material.emissive.getHex()
+    emissive: material.emissive.getHex(),
+    specular: material.specular.getHex()
 };
 
-var meshPhysicalMaterialFolder = gui.addFolder('THREE.MeshPhysicalMaterial');
+var meshPhongMaterialFolder = gui.addFolder('THREE.MeshPhongMaterial');
 
-meshPhysicalMaterialFolder.addColor(data, 'color').onChange(() => { material.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
-meshPhysicalMaterialFolder.addColor(data, 'emissive').onChange(() => { material.emissive.setHex(Number(data.emissive.toString().replace('#', '0x'))) });
-meshPhysicalMaterialFolder.add(material, 'wireframe');
-meshPhysicalMaterialFolder.add(material, 'flatShading').onChange(() => updateMaterial())
-meshPhysicalMaterialFolder.add(material, 'reflectivity', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'refractionRatio', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'roughness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'metalness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'clearcoat', 0, 1, 0.01)
-meshPhysicalMaterialFolder.add(material, 'clearcoatRoughness', 0, 1, 0.01)
-meshPhysicalMaterialFolder.open()
+meshPhongMaterialFolder.addColor(data, 'color').onChange(() => { material.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
+meshPhongMaterialFolder.addColor(data, 'emissive').onChange(() => { material.emissive.setHex(Number(data.emissive.toString().replace('#', '0x'))) });
+meshPhongMaterialFolder.addColor(data, 'specular').onChange(() => { material.specular.setHex(Number(data.specular.toString().replace('#', '0x'))) });
+meshPhongMaterialFolder.add(material, 'shininess', 0, 1024);
+meshPhongMaterialFolder.add(material, 'wireframe');
+meshPhongMaterialFolder.add(material, 'wireframeLinewidth', 0, 10);
+meshPhongMaterialFolder.add(material, 'flatShading').onChange(() => updateMaterial())
+meshPhongMaterialFolder.add(material, 'combine', options.combine).onChange(() => updateMaterial())
+meshPhongMaterialFolder.add(material, 'reflectivity', 0, 1);
+meshPhongMaterialFolder.add(material, 'refractionRatio', 0, 1);
+meshPhongMaterialFolder.open()
 
 function updateMaterial() {
     material.side = Number(material.side)
+    material.combine = Number(material.combine)
     material.needsUpdate = true
 }
 
 var animate = function () {
     requestAnimationFrame(animate)
 
-    torusKnot.rotation.x+=.01
-    torusKnot.rotation.y+=.01
     render()
 
     stats.update()

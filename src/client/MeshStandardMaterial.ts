@@ -1,4 +1,6 @@
-//It is an extension of the MeshStandardMaterial which gives more reflectivity options.
+//It uses the Physically Based Rendering (PBR) model.
+//
+//It creates a more realistic appearance than the MeshLambertMaterial or the MeshPhongMaterial. It is also more computationally expensive.
 
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -30,7 +32,7 @@ const icosahedronGeometry: THREE.IcosahedronGeometry = new THREE.IcosahedronGeom
 const planeGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry()
 const torusKnotGeometry: THREE.TorusKnotGeometry = new THREE.TorusKnotGeometry()
 
-const material: THREE.MeshPhysicalMaterial = new THREE.MeshPhysicalMaterial({})
+const material: THREE.MeshStandardMaterial = new THREE.MeshStandardMaterial()
 
 // const texture = new THREE.TextureLoader().load("img/grid.png")
 // material.map = texture
@@ -77,12 +79,7 @@ var options = {
         "FrontSide": THREE.FrontSide,
         "BackSide": THREE.BackSide,
         "DoubleSide": THREE.DoubleSide,
-    },
-    combine: {
-        "MultiplyOperation": THREE.MultiplyOperation,
-        "MixOperation": THREE.MixOperation,
-        "AddOperation": THREE.AddOperation
-    },
+    }
 }
 const gui = new GUI()
 
@@ -101,19 +98,15 @@ var data = {
     emissive: material.emissive.getHex()
 };
 
-var meshPhysicalMaterialFolder = gui.addFolder('THREE.MeshPhysicalMaterial');
+var meshStandardMaterialFolder = gui.addFolder('THREE.MeshStandardMaterial');
 
-meshPhysicalMaterialFolder.addColor(data, 'color').onChange(() => { material.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
-meshPhysicalMaterialFolder.addColor(data, 'emissive').onChange(() => { material.emissive.setHex(Number(data.emissive.toString().replace('#', '0x'))) });
-meshPhysicalMaterialFolder.add(material, 'wireframe');
-meshPhysicalMaterialFolder.add(material, 'flatShading').onChange(() => updateMaterial())
-meshPhysicalMaterialFolder.add(material, 'reflectivity', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'refractionRatio', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'roughness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'metalness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'clearcoat', 0, 1, 0.01)
-meshPhysicalMaterialFolder.add(material, 'clearcoatRoughness', 0, 1, 0.01)
-meshPhysicalMaterialFolder.open()
+meshStandardMaterialFolder.addColor(data, 'color').onChange(() => { material.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
+meshStandardMaterialFolder.addColor(data, 'emissive').onChange(() => { material.emissive.setHex(Number(data.emissive.toString().replace('#', '0x'))) });
+meshStandardMaterialFolder.add(material, 'wireframe');
+meshStandardMaterialFolder.add(material, 'flatShading').onChange(() => updateMaterial())
+//meshStandardMaterialFolder.add( material, 'roughness', 0, 1 );
+//meshStandardMaterialFolder.add( material, 'metalness', 0, 1 );
+meshStandardMaterialFolder.open()
 
 function updateMaterial() {
     material.side = Number(material.side)
@@ -123,8 +116,6 @@ function updateMaterial() {
 var animate = function () {
     requestAnimationFrame(animate)
 
-    torusKnot.rotation.x+=.01
-    torusKnot.rotation.y+=.01
     render()
 
     stats.update()

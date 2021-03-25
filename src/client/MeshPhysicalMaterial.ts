@@ -109,10 +109,10 @@ meshPhysicalMaterialFolder.add(material, 'wireframe');
 meshPhysicalMaterialFolder.add(material, 'flatShading').onChange(() => updateMaterial())
 meshPhysicalMaterialFolder.add(material, 'reflectivity', 0, 1);
 meshPhysicalMaterialFolder.add(material, 'refractionRatio', 0, 1);
-meshPhysicalMaterialFolder.add(material, 'roughness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'metalness', 0, 1, .01);
-meshPhysicalMaterialFolder.add(material, 'clearcoat', 0, 1, 0.01)
-meshPhysicalMaterialFolder.add(material, 'clearcoatRoughness', 0, 1, 0.01)
+meshPhysicalMaterialFolder.add(material, 'roughness', 0, 1);
+meshPhysicalMaterialFolder.add(material, 'metalness', 0, 1);
+//meshPhysicalMaterialFolder.add(material, 'clearcoat', 0, 1, 0.01)
+//meshPhysicalMaterialFolder.add(material, 'clearcoatRoughness', 0, 1, 0.01)
 meshPhysicalMaterialFolder.open()
 
 function updateMaterial() {
@@ -123,8 +123,8 @@ function updateMaterial() {
 var animate = function () {
     requestAnimationFrame(animate)
 
-    torusKnot.rotation.x+=.01
-    torusKnot.rotation.y+=.01
+    //torusKnot.rotation.x+=.01
+    //torusKnot.rotation.y+=.01
     render()
 
     stats.update()
