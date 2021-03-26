@@ -46,7 +46,7 @@ const cube: THREE.Mesh = new THREE.Mesh(boxGeometry, material)
 cube.position.x = 5
 scene.add(cube)
 
-//const sphere: THREE.Mesh = new THREE.Mesh(sphereGeometry, material)
+const sphere: THREE.Mesh = new THREE.Mesh(sphereGeometry, material)
 sphere.position.x = 3
 scene.add(sphere)
 
