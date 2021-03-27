@@ -22,22 +22,21 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
-// controls.addEventListener('change', () => console.log("Controls Change")) //this line is unnecessary if you are already re-rendering within the animation loop 
-controls.addEventListener('start', () => console.log("Controls Start Event"))
-controls.addEventListener('end', () => console.log("Controls End Event"))
+//controls.addEventListener('change', () => console.log("Controls Change")) //this line is unnecessary if you are already re-rendering within the animation loop 
+//controls.addEventListener('start', () => console.log("Controls Start Event"))
+//controls.addEventListener('end', () => console.log("Controls End Event"))
 
-//need to call 'controls.update' in the animation loop
 // controls.autoRotate = true
 // controls.autoRotateSpeed = 10
-// controls.enableDamping = true
+//controls.enableDamping = true
 //controls.dampingFactor = .01
-controls.enableKeys = true
-controls.keys = {
-    LEFT: 65, //left arrow
-    UP: 87, // up arrow
-    RIGHT: 68, // right arrow
-    BOTTOM: 83 // down arrow
-}
+// controls.enableKeys = true
+// controls.keys = {
+//     LEFT: 37, //left arrow
+//     UP: 38, // up arrow
+//     RIGHT: 39, // right arrow
+//     BOTTOM: 40 // down arrow
+// }
 // controls.mouseButtons = {
 //     LEFT: THREE.MOUSE.ROTATE,
 //     MIDDLE: THREE.MOUSE.DOLLY,
@@ -47,9 +46,7 @@ controls.keys = {
 //     ONE: THREE.TOUCH.ROTATE,
 //     TWO: THREE.TOUCH.DOLLY_PAN
 // }
-// controls.screenSpacePanning = false
-
-//These properties restrict camera movement
+//controls.screenSpacePanning = true
 //controls.minAzimuthAngle = 0
 //controls.maxAzimuthAngle = Math.PI / 2
 //controls.minPolarAngle = Math.PI / 2
