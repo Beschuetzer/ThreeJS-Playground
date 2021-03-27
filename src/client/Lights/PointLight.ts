@@ -36,11 +36,11 @@ document.body.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
-const planeGeometry : THREE.PlaneGeometry = new THREE.PlaneGeometry(100,20);
-const plane : THREE.Mesh = new THREE.Mesh(planeGeometry, new THREE.MeshPhongMaterial());
-plane.rotateX(-Math.PI / 2);
-plane.position.y -=1;
-scene.add(plane);
+// const planeGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(100, 20)
+// const plane: THREE.Mesh = new THREE.Mesh(planeGeometry, new THREE.MeshPhongMaterial())
+// plane.rotateX(-Math.PI / 2)
+// //plane.position.y = -1.75
+// scene.add(plane)
 
 const torusGeometry: THREE.TorusGeometry[] = [
     new THREE.TorusGeometry(),

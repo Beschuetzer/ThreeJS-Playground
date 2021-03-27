@@ -1,12 +1,11 @@
-// A light that gets emitted from a single point in all directions
-
-// distance - Maximum range of the light. Default is 0 (no limit).
-
-// decay - The amount the light dims along the distance of the light. Default is 1.
+// Lights all objects in the scene equally, except for self illuminating objects such as MeshBasicMaterial, meshNormalMaterial and MeshMatcapMaterial.
+// Doesn't cast shadows.
+// Light is spread equally in all directions and distances. So positioning the light different than default position of [0, 0, 0] will make no difference.
+// Materials won't show shading depending on geometry normals and there will be no specular affect, so meshes in front of other meshes will be invisible if they have identical materials or even a single colour map texture.
 
 // If using Relative Import References
 // import * as THREE from '/build/three.module.js'
-// // import { OrbitControls } from '/jsm/controls/OrbitControls'
+// import { OrbitControls } from '/jsm/controls/OrbitControls'
 // import Stats from '/jsm/libs/stats.module'
 // import { GUI } from '/jsm/libs/dat.gui.module'
 
@@ -20,27 +19,22 @@ const scene: THREE.Scene = new THREE.Scene()
 const axesHelper = new THREE.AxesHelper(5)
 scene.add(axesHelper)
 
-var light = new THREE.PointLight();
+var light = new THREE.AmbientLight();
 scene.add(light);
-
-var helper = new THREE.PointLightHelper(light);
-scene.add(helper);
-
 
 const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
 const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth, window.innerHeight)
-
 document.body.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
-const planeGeometry : THREE.PlaneGeometry = new THREE.PlaneGeometry(100,20);
-const plane : THREE.Mesh = new THREE.Mesh(planeGeometry, new THREE.MeshPhongMaterial());
-plane.rotateX(-Math.PI / 2);
-plane.position.y -=1;
-scene.add(plane);
+// const planeGeometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(20, 10)//, 360, 180)
+// const plane: THREE.Mesh = new THREE.Mesh(planeGeometry, new THREE.MeshPhongMaterial())
+// plane.rotateX(-Math.PI / 2)
+// //plane.position.y = -1.75
+// scene.add(plane)
 
 const torusGeometry: THREE.TorusGeometry[] = [
     new THREE.TorusGeometry(),
@@ -106,17 +100,9 @@ const gui = new GUI()
 const lightFolder = gui.addFolder('THREE.Light')
 lightFolder.addColor(data, 'color').onChange(() => { light.color.setHex(Number(data.color.toString().replace('#', '0x'))) });
 lightFolder.add(light, 'intensity', 0, 1, 0.01);
-lightFolder.open()
 
-const pointLightFolder = gui.addFolder('THREE.PointLight')
-//hemisphereLightFolder.addColor(data, 'groundColor').onChange(() => { light.groundColor.setHex(Number(data.groundColor.toString().replace('#', '0x'))) });
-pointLightFolder.add(light, "distance", 0, 100, 0.01)
-pointLightFolder.add(light, "decay", 0, 4, 0.1)
-
-pointLightFolder.add(light.position, "x", -50, 50, 0.01)
-pointLightFolder.add(light.position, "y", -50, 50, 0.01)
-pointLightFolder.add(light.position, "z", -50, 50, 0.01)
-pointLightFolder.open()
+const ambientLightFolder = gui.addFolder('THREE.AmbientLight')
+ambientLightFolder.open()
 
 const meshesFolder = gui.addFolder('Meshes')
 meshesFolder.add(data, 'mapsEnabled').onChange(() => {
@@ -132,8 +118,6 @@ meshesFolder.add(data, 'mapsEnabled').onChange(() => {
 
 var animate = function () {
     requestAnimationFrame(animate)
-
-    helper.update()    
 
     torus.forEach(t => {
         t.rotation.y += .01
