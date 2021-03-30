@@ -33,8 +33,6 @@ const cube: THREE.Mesh = new THREE.Mesh(geometry, material)
 scene.add(cube)
 
 const orbitControls = new OrbitControls(camera, renderer.domElement)
-orbitControls.zoomSpeed = 2;
-orbitControls.panSpeed = 2;
 
 const dragControls = new DragControls([cube], camera, renderer.domElement)
 dragControls.addEventListener("hoveron", function () {
