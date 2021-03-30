@@ -35,7 +35,7 @@ camera.position.z = 2
 
 const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer()
 renderer.physicallyCorrectLights = true
-renderer.shadowMap.enabled = true
+//renderer.shadowMap.enabled = true
 renderer.outputEncoding = THREE.sRGBEncoding
 renderer.setSize(window.innerWidth, window.innerHeight)
 document.body.appendChild(renderer.domElement)
@@ -50,19 +50,13 @@ loader.load(
             if ((<THREE.Mesh>child).isMesh) {
                 let m = <THREE.Mesh>child
                 //shadows are not importable, so have to manage manually
-                if (m.name === 'Suzanne') {
-                    m.receiveShadow = true
-                    m.castShadow = true
-                }
-                else {
-                    m.receiveShadow = true
-                    m.castShadow = true
-                }
+                m.receiveShadow = true
+                m.castShadow = true
             }
             if ((<THREE.Light>child).isLight) {
                 let l = <THREE.Light>child
                 l.castShadow = true
-                l.shadow.bias = -.0035
+                //l.shadow.bias = -.003
                 l.shadow.mapSize.width = 2048
                 l.shadow.mapSize.height = 2048
             }
