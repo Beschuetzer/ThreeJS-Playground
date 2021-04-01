@@ -12,6 +12,13 @@ class App {
         this.port = port
         const app = express()
         app.use(express.static(path.join(__dirname, '../client')))
+        app.use('/js/libs/draco/', express.static(path.join(__dirname, '../../node_modules/three/examples/js/libs/draco/')))
+        app.use('/jsm/loaders/FBXLoader', express.static(path.join(__dirname, '../../node_modules/three/examples/jsm/loaders/FBXLoader.js')))
+        app.use('/jsm/libs/inflate.module.min.js', express.static(path.join(__dirname, '../../node_modules/three/examples/jsm/libs/inflate.module.min.js')))
+        app.use('/jsm/curves/NURBSCurve.js', express.static(path.join(__dirname, '../../node_modules/three/examples/jsm/curves/NURBSCurve.js')))
+        app.use('/jsm/curves/NURBSUtils.js', express.static(path.join(__dirname, '../../node_modules/three/examples/jsm/curves/NURBSUtils.js')))
+        app.use('/jsm/libs/stats.module', express.static(path.join(__dirname, '../../node_modules/three/examples/jsm/libs/stats.module.js')))
+
         // In the webpack version of the boilerplate, it is not necessary 
         // to add static references to the libs in node_modules if 
         // you are using module specifiers in your client.ts imports. 
