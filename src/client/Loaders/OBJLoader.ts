@@ -1,24 +1,16 @@
-// MTL is the material information used by an OBJ file. You can set the colours, specular, emissive, alpha, smoothness, image maps, and there coordinates.
+// Used for loading 3d models saved in the Wavefront OBJ format.
 
-// Since it is a meshPhongMaterial by default, we can only set properties affecting the meshPhongMaterial.
+// There are many DCC (Digital Content Creation) tools that can create models in OBJ format.
 
-// If you create your OBJ and MTL using Blender, then you can change
-
-// Base Color
-// Specular
-// Emission
-// Alpha
-// Smooth/Flat Shaded
+// In Threejs, when importing an OBJ, the default material will be a white meshPhongMaterial so you will need at least one light in your scene.
 
 // import * as THREE from '/build/three.module.js'
 // import { OrbitControls } from '/jsm/controls/OrbitControls'
 // import { OBJLoader } from '/jsm/loaders/OBJLoader'
-// import { MTLLoader } from '/jsm/loaders/MTLLoader'
 // import Stats from '/jsm/libs/stats.module'
 
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import Stats from 'three/examples/jsm/libs/stats.module'
 
@@ -39,31 +31,25 @@ document.body.appendChild(renderer.domElement)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 
-const mtlLoader = new MTLLoader();
-mtlLoader.load('models/monkey.mtl',
-    (materials) => {
-        materials.preload();
+const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true })
 
-        const objLoader: OBJLoader = new OBJLoader();
-        objLoader.setMaterials(materials);
-        objLoader.load(
-            'models/monkey.obj',
-            (object) => {
-                scene.add(object);
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-            },
-            (error) => {
-                console.log('An error happened');
-            }
-        );
+const objLoader: OBJLoader = new OBJLoader();
+objLoader.load(
+    'models/cube.obj',
+    (object) => {
+        //(<THREE.Mesh>object.children[0]).material = material
+        object.traverse(function (child) {
+         if ((<THREE.Mesh>child).isMesh) {
+             (<THREE.Mesh>child).material = material
+         }
+        })
+        scene.add(object);
     },
     (xhr) => {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded')
     },
     (error) => {
-        console.log('An error happened');
+        console.log(error);
     }
 )
 
