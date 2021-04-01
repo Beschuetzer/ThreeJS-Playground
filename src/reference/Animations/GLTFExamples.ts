@@ -44,16 +44,6 @@ const gltfLoader: GLTFLoader = new GLTFLoader();
 gltfLoader.load(
     'models/vanguard.glb',
     (gltf) => {
-        gltf.scene.traverse(function (child) {
-            if ((<THREE.Mesh>child).isMesh) {
-                if ((<THREE.Mesh>child).material) {
-                    console.log('chang------------------------------------------------');
-                    ((<THREE.Mesh>child).material as THREE.MeshBasicMaterial).transparent = false
-                }
-            }
-        })
-
-        console.log('gltf =', gltf);
         // gltf.scene.scale.set(.01, .01, .01)
         mixer = new THREE.AnimationMixer(gltf.scene);
 
